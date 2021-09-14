@@ -4,7 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-
+    photosFolder: '%kernel.project_dir%/photos'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -23,3 +23,26 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    Aws\S3\S3Client:
+        arguments:
+            -
+                version: '2006-03-01' # or 'latest'
+                region: 'eu-central-1' # 'eu-central-1' for example
+                credentials:
+                    key: '%env(AWS_S3_ACCESS_ID)%'
+                    secret: '%env(AWS_S3_ACCESS_SECRET)%'
+
+    Spatie\Dropbox\Client:
+        arguments:
+            $accessTokenOrAppCredentials: '%env(DROPBOX_ACCESS_TOKEN)%'
+
+    Spatie\FlysystemDropbox\DropboxAdapter:
+        arguments:
+            $client: '@Spatie\Dropbox\Client'
+
+    League\Flysystem\AwsS3V3\AwsS3V3Adapter:
+        arguments:
+            $client: '@Aws\S3\S3Client'
+            $bucket: '%env(AWS_S3_BUCKET_NAME)%'
+

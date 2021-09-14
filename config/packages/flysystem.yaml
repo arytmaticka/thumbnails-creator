@@ -1,0 +1,11 @@
+# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+flysystem:
+    storages:
+        local.storage:
+            adapter: 'local'
+            options:
+                directory: '%env(LOCAL_DIR)%'
+        amazon.storage:
+            adapter: 'League\Flysystem\AwsS3V3\AwsS3V3Adapter'
+        dropbox.storage:
+            adapter: 'Spatie\FlysystemDropbox\DropboxAdapter'
